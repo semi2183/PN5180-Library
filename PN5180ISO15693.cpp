@@ -40,9 +40,9 @@ ISO15693ErrorCode PN5180ISO15693::getInventory(uint8_t *uid) {
   //                        \-- 1 slot: only one card, no AFI field present
   PN5180DEBUG(F("Get Inventory...\n"));
 
-  for (int i=0; i<8; i++) {
+  /*for (int i=0; i<8; i++) {
     uid[i] = 0;
-  }
+  }*/
 
   uint8_t *readBuffer;
   ISO15693ErrorCode rc = issueISO15693Command(inventory, sizeof(inventory), &readBuffer);
@@ -547,15 +547,15 @@ ISO15693ErrorCode PN5180ISO15693::issueISO15693Command(uint8_t *cmd, uint8_t cmd
 #endif
 
   sendData(cmd, cmdLen);
-  delay(10);
+  delay(5);
   uint32_t status = getIRQStatus();
   if (0 == (status & RX_SOF_DET_IRQ_STAT)) {
     return EC_NO_CARD;
   }
-  while (0 == (status & RX_IRQ_STAT)) {
+  /*while (0 == (status & RX_IRQ_STAT)) {
     delay(10);
     status = getIRQStatus();
-  }
+  }*/
 
   uint32_t rxStatus;
   readRegister(RX_STATUS, &rxStatus);

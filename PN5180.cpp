@@ -490,17 +490,19 @@ bool PN5180::transceiveCommand(uint8_t *sendBuffer, size_t sendBufferLen, uint8_
   // 0.
   while (LOW != digitalRead(PN5180_BUSY)); // wait until busy is low
   // 1.
-  digitalWrite(PN5180_NSS, LOW); delay(2);
+  digitalWrite(PN5180_NSS, LOW); 
+  delayMicroseconds(10);
   // 2.
   for (uint8_t i=0; i<sendBufferLen; i++) {
     SPI.transfer(sendBuffer[i]);
   }
   // 3.
-  while(HIGH != digitalRead(PN5180_BUSY));  // wait until BUSY is high
+  //  while(HIGH != digitalRead(PN5180_BUSY));  // wait until BUSY is high
   // 4.
-  digitalWrite(PN5180_NSS, HIGH); delay(1);
+  digitalWrite(PN5180_NSS, HIGH); 
+  //delay(1);
   // 5.
-  while (LOW != digitalRead(PN5180_BUSY)); // wait unitl BUSY is low
+  //while (LOW != digitalRead(PN5180_BUSY)); // wait unitl BUSY is low
 
   // check, if write-only
   //
@@ -508,7 +510,8 @@ bool PN5180::transceiveCommand(uint8_t *sendBuffer, size_t sendBufferLen, uint8_
   PN5180DEBUG(F("Receiving SPI frame...\n"));
 
   // 1.
-  digitalWrite(PN5180_NSS, LOW); delay(2);
+  digitalWrite(PN5180_NSS, LOW); 
+  delayMicroseconds(10);
   // 2.
   for (uint8_t i=0; i<recvBufferLen; i++) {
     recvBuffer[i] = SPI.transfer(0xff);
@@ -516,7 +519,8 @@ bool PN5180::transceiveCommand(uint8_t *sendBuffer, size_t sendBufferLen, uint8_
   // 3.
   while(HIGH != digitalRead(PN5180_BUSY));  // wait until BUSY is high
   // 4.
-  digitalWrite(PN5180_NSS, HIGH); delay(1);
+  digitalWrite(PN5180_NSS, HIGH); 
+  delay(1);
   // 5.
   while(LOW != digitalRead(PN5180_BUSY));  // wait until BUSY is low
 

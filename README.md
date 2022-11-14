@@ -7,6 +7,10 @@ Arduino Uno / Arduino ESP-32 library for PN5180-NFC Module from NXP Semiconducto
 
 Release Notes:
 
+Version 1.8.3 - 14.11.2022
+
+	* Adjust Timing of tranciveCommand by semi
+
 Version 1.8.1 - 19.08.2021
 
 	* Added changes from Nettermann90
