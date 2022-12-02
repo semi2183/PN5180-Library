@@ -547,7 +547,8 @@ ISO15693ErrorCode PN5180ISO15693::issueISO15693Command(uint8_t *cmd, uint8_t cmd
 #endif
 
   sendData(cmd, cmdLen);
-  delay(5);
+  //TODO
+  delay(7);
   uint32_t status = getIRQStatus();
   if (0 == (status & RX_SOF_DET_IRQ_STAT)) {
     return EC_NO_CARD;
@@ -597,7 +598,7 @@ ISO15693ErrorCode PN5180ISO15693::issueISO15693Command(uint8_t *cmd, uint8_t cmd
     PN5180DEBUG("ERROR code=");
     PN5180DEBUG(formatHex(errorCode));
     PN5180DEBUG(" - ");
-    PN5180DEBUG(strerror(errorCode));
+    //PN5180DEBUG(strerror(errorCode));
     PN5180DEBUG("\n");
 
     if (errorCode >= 0xA0) { // custom command error codes

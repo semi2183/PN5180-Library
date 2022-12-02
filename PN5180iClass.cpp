@@ -240,7 +240,7 @@ iClassErrorCode PN5180iClass::issueiClassCommand(uint8_t *cmd, uint8_t cmdLen, u
     PN5180DEBUG("ERROR code=");
     PN5180DEBUG(formatHex(errorCode));
     PN5180DEBUG(" - ");
-    PN5180DEBUG(strerror(errorCode));
+    //PN5180DEBUG(strerror(errorCode));
     PN5180DEBUG("\n");
 
     return (iClassErrorCode)errorCode;

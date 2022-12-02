@@ -18,6 +18,7 @@
 //
 #ifndef DEBUG_H
 #define DEBUG_H
+//#define DEBUG
 
 #ifdef DEBUG
 #define PN5180DEBUG(msg) Serial.print(msg)

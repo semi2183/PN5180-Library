@@ -478,6 +478,8 @@ status register contain information on the exception.
  * If there is a parameter error, the IRQ is set to ACTIVE and a GENERAL_ERROR_IRQ is set.
  */
 bool PN5180::transceiveCommand(uint8_t *sendBuffer, size_t sendBufferLen, uint8_t *recvBuffer, size_t recvBufferLen) {
+REG_PORT_OUTSET1 = PORT_PB11;
+
 #ifdef DEBUG
   PN5180DEBUG(F("Sending SPI frame: '"));
   for (uint8_t i=0; i<sendBufferLen; i++) {
@@ -506,9 +508,12 @@ bool PN5180::transceiveCommand(uint8_t *sendBuffer, size_t sendBufferLen, uint8_
 
   // check, if write-only
   //
-  if ((0 == recvBuffer) || (0 == recvBufferLen)) return true;
+  REG_PORT_OUTCLR1 = PORT_PB11;
+  if ((0 == recvBuffer) || (0 == recvBufferLen))  return true;
   PN5180DEBUG(F("Receiving SPI frame...\n"));
-
+  REG_PORT_OUTSET0 = PORT_PA20;
+  // 0:
+  while(LOW != digitalRead(PN5180_BUSY));  // wait until BUSY is low
   // 1.
   digitalWrite(PN5180_NSS, LOW); 
   delayMicroseconds(10);
@@ -517,12 +522,12 @@ bool PN5180::transceiveCommand(uint8_t *sendBuffer, size_t sendBufferLen, uint8_
     recvBuffer[i] = SPI.transfer(0xff);
   }
   // 3.
-  while(HIGH != digitalRead(PN5180_BUSY));  // wait until BUSY is high
+  //while(HIGH != digitalRead(PN5180_BUSY));  // wait until BUSY is high
   // 4.
   digitalWrite(PN5180_NSS, HIGH); 
-  delay(1);
+  //delay(1);
   // 5.
-  while(LOW != digitalRead(PN5180_BUSY));  // wait until BUSY is low
+  //while(LOW != digitalRead(PN5180_BUSY));  // wait until BUSY is low
 
 #ifdef DEBUG
   PN5180DEBUG(F("Received: "));
@@ -532,7 +537,7 @@ bool PN5180::transceiveCommand(uint8_t *sendBuffer, size_t sendBufferLen, uint8_
   }
   PN5180DEBUG("'\n");
 #endif
-
+  REG_PORT_OUTCLR0 = PORT_PA20;
   return true;
 }
 
@@ -587,9 +592,9 @@ PN5180TransceiveStat PN5180::getTransceiveState() {
 
   uint32_t rfStatus;
   if (!readRegister(RF_STATUS, &rfStatus)) {
-#ifdef DEBUG
-    showIRQStatus(getIRQStatus());
-#endif
+//#ifdef DEBUG
+//    showIRQStatus(getIRQStatus());
+//#endif
     PN5180DEBUG(F("ERROR reading RF_STATUS register.\n"));
     return PN5180TransceiveStat(0);
   }
